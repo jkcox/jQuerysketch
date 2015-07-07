@@ -1,0 +1,116 @@
+<html>
+  <head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+displayGrid(16);
+$('.square').mouseenter(function() {
+  $(this).css("background", "white");
+});
+$('.clear').click(function() {
+  clean();
+});
+
+$(".normal").click(function() {
+  setGrid();
+  $(".square").unbind();
+  $(".square").mouseenter(function() {
+    $(this).css("background", "white");
+  });
+});
+
+$(".random").click(function() {
+  setGrid();
+  $(".square").unbind();
+  $(".square").mouseenter(function() {
+    $(this).css("background", randomColor());
+  });
+});
+$(".opacity").click(function() {
+  setGrid();
+  $(".square").unbind();
+  $(".square").mouseenter(function() {
+    reduceOpacity($(this));
+  })
+});
+$(".trail").click(function () {
+  setGrid();
+  $(".square").unbind();
+  $(".square").hover(function() {
+    $(this).css("opacity", 0);
+  }, function () {
+    $(this).fadeTo('fast', 1);
+  });
+});
+});
+
+function setGrid() {
+var col = prompt("Enter number of columns: ");
+displayGrid(col);
+clean();
+}
+
+function clean() {
+$(".square").css("background", "#34495e").css('opacity', '1');
+}
+
+function reduceOpacity(elem) {
+var opacity = elem.css('opacity');
+var nextOpacity = opacity - 0.1
+if (nextOpacity > 0) { elem.css('opacity', nextOpacity); }
+else { elem.css('opacity', '0'); }
+}
+
+function displayGrid (n) {
+var size = 960;
+var boxSize = (960 - 4*n)/n;
+var wrap = $(".wrap").html("");
+for (var j = 0; j < n; j++) {
+  for (var i = 0; i < n; i++) {
+    wrap.append( $("<div></div>").addClass("square").height(boxSize).width(boxSize) );
+  }
+  wrap.append($("<div></div>").css("clear", "both"));
+}
+}
+
+function randomColor() {
+var red = Math.floor(Math.random()*256)
+var blue = Math.floor(Math.random()*256)
+var green = Math.floor(Math.random()*256)
+return "#" + red.toHex() + blue.toHex() + green.toHex();
+}
+
+Number.prototype.toHex = function() {
+if (this < 16) { return '0' + this.toString(16); }
+return this.toString(16);
+}
+</script>
+<style media="screen">
+* { font-family: Arial; }
+header { text-align: center; }
+div { margin: 0; padding: 0; }
+button { background: #34495e; border: 1px solid #404040; border-radius: 3px; color: white;
+	padding: 3px 10px; }
+.container { width: 1000px; margin: 0 auto; }
+.navbar { margin: 0 auto; width: 960px; text-align: center; }
+.wrap { margin: 10px auto; width: 960px; }
+.square { float: left; border: 1px solid black; background: #34495e; }
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Sketch Pad</h1>
+        <h4>Move the mouse over the area below to sketch, click the buttons to try a new variation.</h4>
+      </header>
+      <div class="navbar">
+				<button class="normal">Default</button>
+				<button class="random">Random Color</button>
+				<button class="opacity">Opacity Color</button>
+				<button class="trail">Trail</button>
+				<button class="clear">Clear</button>
+			</div>
+      <div class="wrap"></div>
+    </div>
+  </body>
+</html>
